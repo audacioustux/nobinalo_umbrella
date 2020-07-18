@@ -25,6 +25,8 @@ config :nobinalo_api, NobinaloApi.Endpoint,
 config :nobinalo,
   ecto_repos: [Nobinalo.Repo]
 
+config :nobinalo, Nobinalo.Repo, migration_timestamps: [type: :timestamptz]
+
 # gaurdian config for email verification token
 config :nobinalo, Nobinalo.Users.Emails.Guardian,
   issuer: "nobinalo",

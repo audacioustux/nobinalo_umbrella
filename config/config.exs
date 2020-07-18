@@ -23,8 +23,7 @@ config :nobinalo_api, NobinaloApi.Endpoint,
 
 # Configure Mix tasks and generators
 config :nobinalo,
-  ecto_repos: [Nobinalo.Repo],
-  migration_timestamps: [type: :timestamptz]
+  ecto_repos: [Nobinalo.Repo]
 
 # gaurdian config for email verification token
 config :nobinalo, Nobinalo.Users.Emails.Guardian,

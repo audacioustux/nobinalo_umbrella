@@ -43,6 +43,7 @@ config :nobinalo, Nobinalo.Repo,
   password: "postgres",
   database: "nobinalo_dev",
   hostname: "localhost",
+  migration_timestamps: [type: :timestamptz],
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
 

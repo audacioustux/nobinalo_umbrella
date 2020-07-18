@@ -1,7 +1,7 @@
 defmodule Nobinalo.Users.Profiles.Profile do
   @moduledoc false
 
-  use Ecto.Schema
+  use Nobinalo.Schema
   import Ecto.Changeset
 
   alias Nobinalo.Files.Images.Image

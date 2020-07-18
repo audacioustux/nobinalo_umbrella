@@ -14,7 +14,7 @@ defmodule Nobinalo.Repo.Migrations.CreateEmails do
       add :is_public, :boolean, null: false, default: false
       add :is_backup, :boolean, null: false, default: false
 
-      add :verified_at, :utc_datetime_usec
+      add :verified_at, :timestamptz
 
       timestamps()
     end

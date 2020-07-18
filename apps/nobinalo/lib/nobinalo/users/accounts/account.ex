@@ -3,7 +3,7 @@ defmodule Nobinalo.Users.Accounts.Account do
 
   alias __MODULE__
 
-  use Ecto.Schema
+  use Nobinalo.Schema
   import Ecto.Changeset
 
   alias Ecto.UUID

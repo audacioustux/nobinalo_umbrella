@@ -36,4 +36,10 @@ defmodule Nobinalo.Users.Accounts do
 
   """
   def get_account!(id), do: Repo.get!(Account, id)
+
+  def create_account!(attrs \\ %{}) do
+    %Account{}
+    |> Account.create_changeset(attrs)
+    |> Repo.insert!()
+  end
 end

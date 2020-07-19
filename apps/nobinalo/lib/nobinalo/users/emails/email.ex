@@ -4,7 +4,6 @@ defmodule Nobinalo.Users.Emails.Email do
   use Nobinalo.Schema
   import Ecto.Changeset
 
-  alias Nobinalo.Repo
   alias Nobinalo.Users.Accounts.Account
 
   # https://html.spec.whatwg.org/multipage/input.html#e-mail-state-(type=email)
@@ -28,11 +27,10 @@ defmodule Nobinalo.Users.Emails.Email do
   @doc false
   def create_changeset(email, attrs) do
     email
-    |> cast(attrs, ~w[email is_primary is_verified]a)
-    |> cast_assoc(:account, required: true)
+    |> cast(attrs, ~w[email is_primary is_verified account_id]a)
+    |> foreign_key_constraint(:account_id)
     |> validate_email()
-    |> prepare_changes(&unsafe_validate_constraints/1)
-    |> prepare_changes(&validate_constraints/1)
+    |> prepare_changes(&validate_verified_email/1)
   end
 
   @multi_primary_err_msg "Multiple primary email address is not allowed."
@@ -43,29 +41,15 @@ defmodule Nobinalo.Users.Emails.Email do
     |> validate_format(:email, @email_re, message: "Invalid Email address")
   end
 
-  defp unsafe_validate_constraints(changeset) do
-    put_change(changeset, :verified_at, Time.utc_now())
-
-    changeset
-    |> unsafe_validate_unique(:email, Repo)
-    |> unsafe_validate_unique(:email, Repo,
-      name: "primary_email_index",
-      message: @multi_primary_err_msg
-    )
-
-    unless get_change(changeset, :is_verified) do
-      delete_change(changeset, :verified_at)
-    end
-  end
-
-  defp validate_constraints(%{data: %{is_verified: true}} = changeset) do
+  defp validate_verified_email(%{changes: %{is_verified: true}} = changeset) do
     changeset
     |> unique_constraint(:email)
     |> unique_constraint(:email,
       name: "primary_email_index",
       message: @multi_primary_err_msg
     )
+    |> put_change(:verified_at, DateTime.utc_now())
   end
 
-  defp validate_constraints(changeset), do: changeset
+  defp validate_verified_email(changeset), do: changeset
 end

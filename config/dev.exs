@@ -46,7 +46,7 @@ config :nobinalo, Nobinalo.Repo,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
 
-config :my_app, Nobinalo.Users.Emails.Mailer, adapter: Bamboo.LocalAdapter
+config :nobinalo, Nobinalo.Users.Emails.Mailer, adapter: Bamboo.LocalAdapter
 
 # For development, we disable any cache and enable
 # debugging and code reloading.

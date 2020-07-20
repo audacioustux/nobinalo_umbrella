@@ -24,10 +24,11 @@ config :nobinalo_web, NobinaloWeb.Endpoint,
   http: [port: 4002],
   server: false
 
+config :nobinalo, Nobinalo.Users.Emails.Mailer, adapter: Bamboo.TestAdapter
+
 # Print only warnings and errors during test
 config :logger, level: :warn
 
 config :argon2_elixir,
   t_cost: 1,
   m_cost: 8
-

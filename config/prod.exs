@@ -97,6 +97,12 @@ config :nobinalo_web, NobinaloWeb.Endpoint,
 # Do not print debug messages in production
 config :logger, level: :info
 
+config :nobinalo, Nobinalo.Users.Emails.Mailer,
+  adapter: Bamboo.SendGridAdapter,
+  hackney_opts: [
+    recv_timeout: :timer.minutes(1)
+  ]
+
 # Finally import the config/prod.secret.exs which loads secrets
 # and configuration from environment variables.
 import_config "prod.secret.exs"

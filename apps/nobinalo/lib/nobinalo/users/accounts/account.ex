@@ -5,10 +5,14 @@ defmodule Nobinalo.Users.Accounts.Account do
 
   use Nobinalo.Schema
   import Ecto.Changeset
+  import Ecto.Query
 
   alias Ecto.UUID
-  alias Nobinalo.Users.Profiles.Profile
+  alias Nobinalo.Users
+  alias Users.Emails.Email
+  alias Users.Profiles.Profile
 
+  @derive {Inspect, except: [:password]}
   @primary_key {:id, UUID, read_after_writes: true}
   schema "accounts" do
     field :display_name
@@ -19,6 +23,7 @@ defmodule Nobinalo.Users.Accounts.Account do
     field :is_active, :boolean, default: true
 
     has_one(:profile, Profile)
+    has_many(:emails, Email)
 
     timestamps()
   end
@@ -63,32 +68,8 @@ defmodule Nobinalo.Users.Accounts.Account do
     |> validate_password()
   end
 
-  @doc """
-    Verifies the password
-  """
-  def valid_password?(
-        %Account{
-          password_hash: password_hash
-        },
-        password
-      )
-      when is_binary(password_hash) and byte_size(password) > 0 do
-    Argon2.verify_pass(password, password_hash)
-  end
-
-  def valid_password?(_, _) do
-    Argon2.no_user_verify()
-    false
-  end
-
-  @doc """
-  Validate the current password otherwise adds an error to the changeset
-  """
-  def validate_current_password(changeset, password) do
-    if valid_password?(changeset.data, password) do
-      changeset
-    else
-      add_error(changeset, :current_password, "is not valid")
-    end
+  def query_active(query \\ Account) do
+    query
+    |> where([a], a.is_active)
   end
 end

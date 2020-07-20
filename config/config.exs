@@ -16,7 +16,8 @@ config :nobinalo_api,
 # Configures the endpoint
 config :nobinalo_api, NobinaloApi.Endpoint,
   url: [host: "localhost"],
-  secret_key_base: "ABu1SSTewgBWkrZzJz+pCOwNHv7Y3hM5thsm6fN27QdUlxL1SvlH4P8l6a49S5CW",
+  secret_key_base:
+    "ABu1SSTewgBWkrZzJz+pCOwNHv7Y3hM5thsm6fN27QdUlxL1SvlH4P8l6a49S5CW",
   render_errors: [view: NobinaloApi.ErrorView, accepts: ~w(json), layout: false],
   pubsub_server: NobinaloApi.PubSub,
   live_view: [signing_salt: "MzQnjqLS"]
@@ -28,7 +29,7 @@ config :nobinalo,
 config :nobinalo, Nobinalo.Repo, migration_timestamps: [type: :timestamptz]
 
 # gaurdian config for email verification token
-config :nobinalo, Nobinalo.Users.Emails.Guardian,
+config :nobinalo, Nobinalo.Users.Guardian,
   issuer: "nobinalo",
   verify_issuer: true,
   secret_key: "4MxAx7D/a8sURTzv+/jkhUaq1sZyDxEjyxlqJDWsAXyUoAuGqHgzS4TVe6q2NevE"
@@ -40,8 +41,13 @@ config :nobinalo_web,
 # Configures the endpoint
 config :nobinalo_web, NobinaloWeb.Endpoint,
   url: [host: "localhost"],
-  secret_key_base: "xeunoTfiMCJPckJLlb7pZNVHHlDgRRfpJ1LGJAEuhHBN3IbUOqnBeGoGFsVB+pcD",
-  render_errors: [view: NobinaloWeb.ErrorView, accepts: ~w(html json), layout: false],
+  secret_key_base:
+    "xeunoTfiMCJPckJLlb7pZNVHHlDgRRfpJ1LGJAEuhHBN3IbUOqnBeGoGFsVB+pcD",
+  render_errors: [
+    view: NobinaloWeb.ErrorView,
+    accepts: ~w(html json),
+    layout: false
+  ],
   pubsub_server: Nobinalo.PubSub,
   live_view: [signing_salt: "NjTpCwT0"]
 

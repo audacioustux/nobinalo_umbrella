@@ -55,15 +55,24 @@ defmodule Nobinalo.Users.Emails do
     %Email{}
     |> Email.create_changeset(attrs)
     |> Repo.insert!()
+    |> gen_email_verification_token()
   end
 
-  def verify_email(attrs \\ %{}) do
+  def verify_email(token) do
+    _verify_email(Email.get_unverified_by_token_query(token))
   end
 
-  defp verify_email_verification_token() do
+  defp _verify_email({:ok, query}) do
+    Repo.one!(query)
+    |> Email.set_verified_changeset()
+    |> Repo.update!()
   end
 
-  defp gen_email_verification_token(user, email) do
-    Guardian.encode_and_sign(user, email, token_type: "verify_email")
+  defp _verify_email({:error, _} = err), do: err
+
+  def gen_email_verification_token(%Email{} = email) do
+    Guardian.encode_and_sign(email.account_id, %{email: email.email},
+      token_type: "verify_email"
+    )
   end
 end

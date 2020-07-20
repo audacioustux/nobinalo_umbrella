@@ -43,6 +43,7 @@ defmodule Nobinalo.MixProject do
       {:mime, "~> 1.2"},
       {:jason, "~> 1.0"},
       {:argon2_elixir, "~> 2.0"},
+      {:bamboo, "~> 1.5"},
       {:guardian, "~> 2.0"},
       {:plug, ">= 0.0.0"}
     ]

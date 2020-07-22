@@ -5,6 +5,7 @@ defmodule Nobinalo.Users.Accounts do
 
   import Ecto.Query, warn: false
   alias Nobinalo.Repo
+  alias Ecto.Multi
 
   alias Nobinalo.Users.Accounts.Account
   alias Nobinalo.Users.Emails.Email
@@ -38,9 +39,9 @@ defmodule Nobinalo.Users.Accounts do
   """
   def get_account!(id), do: Repo.get!(Account, id)
 
-  def create_account!(attrs \\ %{}) do
+  def register_account!(attrs \\ %{}) do
     %Account{}
-    |> Account.create_changeset(attrs)
+    |> Account.register_changeset(attrs)
     |> Repo.insert!()
   end
 
@@ -51,9 +52,10 @@ defmodule Nobinalo.Users.Accounts do
       |> Email.query_email(email)
 
     account =
-      from e in email,
+      from(e in email,
         join: a in assoc(e, :account),
         select: a
+      )
 
     with account <- Repo.one(account),
          true <- validate_password?(account, password) do

@@ -31,9 +31,9 @@ defmodule Nobinalo.Users.Emails.Email do
   end
 
   @doc false
-  def create_changeset(email, attrs) do
+  def register_changeset(email, attrs) do
     email
-    |> cast(attrs, ~w[email is_primary is_verified account_id]a)
+    |> cast(attrs, ~w[email is_verified account_id]a)
     |> foreign_key_constraint(:account_id)
     |> validate_email()
     |> prepare_changes(&validate_verified_email/1)

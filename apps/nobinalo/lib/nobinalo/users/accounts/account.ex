@@ -15,12 +15,16 @@ defmodule Nobinalo.Users.Accounts.Account do
   @derive {Inspect, except: [:password]}
   @primary_key {:id, UUID, read_after_writes: true}
   schema "accounts" do
-    field :display_name
-    field :password, :string, virtual: true
-    field :password_hash
-    field :successor, UUID
-    field :supervisor, UUID
-    field :is_active, :boolean, default: true
+    field(:display_name)
+    field(:password, :string, virtual: true)
+    field(:password_hash)
+    field(:is_active, :boolean, default: true)
+
+    belongs_to(:successor, Account)
+    belongs_to(:supervisor, Account)
+
+    has_many(:supervisor_of, Account)
+    has_many(:successor_of, Account)
 
     has_one(:profile, Profile)
     has_many(:emails, Email)
@@ -31,11 +35,23 @@ defmodule Nobinalo.Users.Accounts.Account do
   @doc """
     A account changeset for create
   """
-  def create_changeset(account, attrs) do
+  def register_changeset(account, attrs, id_type) do
     account
     |> cast(attrs, ~w[display_name password]a)
     |> validate_display_name()
     |> validate_password()
+    |> foreign_key_constraint(:supervisor)
+    |> register_with(id_type)
+  end
+
+  defp register_with(changeset, :email) do
+    changeset
+    |> cast_assoc(:emails,
+      with: fn email, attrs ->
+        Email.register_changeset(email, attrs)
+        |> put_change(:is_primary, true)
+      end
+    )
   end
 
   defp validate_display_name(changeset) do

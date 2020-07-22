@@ -9,6 +9,7 @@ alias Users.Accounts
 alias Accounts.Account
 alias Users.Emails
 alias Emails.Email
+alias Emails.Mailer
 alias Users.Profiles
 alias Profiles.Profile
 alias Users.Guardian

@@ -55,7 +55,6 @@ defmodule Nobinalo.Users.Emails do
     %Email{}
     |> Email.create_changeset(attrs)
     |> Repo.insert!()
-    |> gen_email_verification_token()
   end
 
   def verify_email(token) do
